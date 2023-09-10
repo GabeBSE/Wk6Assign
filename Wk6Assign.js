@@ -1,8 +1,8 @@
-class Card {
-    constructor(suit,name,value){
+class Card {                       //Created Card class to set up the card properties.
+    constructor(suit,name,value){  
         this.name = name;
         this.suit = suit;
-        this.value = value;
+        this.value = value;  
     }
 }
 
@@ -10,25 +10,25 @@ class Card {
 
 class Deck {
     constructor() {
-      this.cards = [];
-      this.suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs'];
+      this.cards = []; //Will represent my array of cards or cards in the deck.
+      this.suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs']; 
       this.names = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
       this.values = [14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
     }
 
     createDeck() {
         console.log('Creating a new Deck');
-        for (let i = 0; i < this.suits.length; i++) {
-            for (let n = 0; n < this.names.length; n++) {
+        for (let i = 0; i < this.suits.length; i++) { //this loop will itterate through my suits and names arrays
+            for (let n = 0; n < this.names.length; n++) { 
                 this.cards.push(new Card(this.suits[i], this.names[n], this.values[n]));
-            }
-        }
-    }
+            }          //In this loop a new Card is made for each constructor set. The new Card object is pushed into
+        }   //my cards array of my Deck object with this.cards.push new Card line of code. When called 52 cards populate.
+    }                
 
 
     shuffleDeck() {
-        console.log('Shuffling Deck');
-        const shuffleDeck = [];
+        console.log('Shuffling Deck'); //This is where the cards are shuffled randomly selecting from original deck
+        const shuffleDeck = [];       //inside the for loop block code and we get a return shuffled deck.
         for (let i = 0; i < 52; i++) {
             let randomPosition = Math.floor((this.cards.length - i) * Math.random());
             let randomItem = this.cards.splice(randomPosition, 1);
@@ -37,7 +37,7 @@ class Deck {
         return shuffleDeck;
     }
 
-    dealDeck(players, shuffledCards) {
+    dealDeck(players, shuffledCards) { //Here the new shuffledDeck  is distributed evenly between player 1 and player 2.
         console.log('Dealing Cards');
         
         
@@ -46,74 +46,69 @@ class Deck {
     
         for (let i = 0; i < players.length; i++) {
             const dealingCards = shuffledCards.splice(0, cardsPerPlayer);
-            players[i].cards.push(...dealingCards); //was .hands.push
+            players[i].cards.push(...dealingCards); 
         }
     }
     } 
 
-class Players {
+class Players {          //Player properties
     constructor(name) {
-        this.cards = []; //Player properties are here
-        this.name = name;
-        this.points = 0;
-        // this.hands = [];
+        this.cards = []; //array represents the player's hand of cards
+        this.name = name;//stores the player's name
+        this.points = 0; //Keeps track of the player's points
+        
     }
 }
 
 class Game {
     constructor() {
-        this.players = [];
+        this.players = []; //this will hold player objects
     }
 
     start() {  //Created players - assigned names <---STARTING the game is initiated here
         const myDeck = new Deck();   //Creating the Deck and shuffling here
         this.players.push(new Players('Volibear'));
-        this.players.push(new Players('Rengar'));
-        console.log('DECLARE WAR!!!', this.players);
+        this.players.push(new Players('Rengar'));  //Lists players
+        console.log('DECLARE WAR!!!', this.players); //displays Declare War to the console.
 
         myDeck.createDeck();   
-        const shuffledDeck = myDeck.shuffleDeck(); 
+        const shuffledDeck = myDeck.shuffleDeck(); //calls createDeck and shuffleDeck methods to shuffle the deck.
 
         for (let i = 0; i < 26; i++) {
-            this.players[0].cards.push(shuffledDeck[i]);
+            this.players[0].cards.push(shuffledDeck[i]); //Here distribution of 26 cards to each player
             this.players[1].cards.push(shuffledDeck[i + 26]);
         }
         
-       //myDeck.dealDeck(this.players, shuffledDeck); This was used before the current changes.
-       //let shuffledDeck = myDeck.shuffleDeck();  This was used before the current changes.
+       
 
-
-        // myDeck.dealDeck(this.players, shuffledDeck); //Dealing cards to Players
-
-
-        this.playGame(); //This statement calls  `playGame()` method on the object (this.)
+        this.playGame(); //This statement calls  `playGame()` method to start the game
                         
-        this.endGame();
+        this.endGame();  //This statement calls  `endGame()` method to end the game
 
     }
 
-    playGame() {
-        console.log('DECLARE WAR'); //Here players start entering a loop taking turns playing their hand of cards.
-        let player1 = this.players[0]; // High value card will win the round
-        let player2 = this.players[1]; //
-        let roundWinner = '';  //<---telling me that it couldn't read it's value. But it is reading now.
-        let turn = 0;
+    playGame() { //The game play is controlled here between two players.
+        console.log('DECLARE WAR'); //Declare War is printed to console.
+        let player1 = this.players[0]; // player1 and player2 are the variables in my playGame method.
+        let player2 = this.players[1]; //0 represents player 1 and 1 represents player2 
+        let roundWinner = '';  // roundWinner will keep track of the winner each round
+        let turn = 0; //
         while (player1.cards.length > 0 && player2.cards.length > 0) {  
-            let player1Card = player1.cards.pop();                         
-            let player2Card = player2.cards.pop();                   
+            let player1Card = player1.cards.pop(); //Represents PLAYERS DRAWING CARDS from their hands during each                      
+            let player2Card = player2.cards.pop(); //turn of the game                
             if (player1Card.value > player2Card.value) {
-                roundWinner = player1.name; //<---------HERE IS THE roundWinner VALUE
+                roundWinner = player1.name;      //PLAYER ONE WINS THE ROUND WITH HIGHER CARD
                 player1.points += 1;
                 console.log('Turn: ', (turn +=1), '\nPlayer 1 card: ', player1Card.name, ' of ', player1Card.suit, 
                 '\nplayer 2 Card: ', player2Card.name, ' of ', player2Card.suit, "\n"); 
-                 
+                                                                                         //OR
             }
-            else if (player2Card.value > player1Card.value) {
+            else if (player2Card.value > player1Card.value) { //PLAER TWO WINS THE ROUND WITH HIGHER CARD
                 roundWinner = player2.name;
                 player2.points +=1;
                 console.log('Turn:', (turn += 1), '\nPlayer 1 Card: ', player1Card.name, ' of ', player1Card.suit,
                 '\nPlayer 2 card: ', player2Card.name, ' of ', player2Card.suit, "\n");
-            }                 
+            }                                                             //OR IF TIE, NO POINTS AWARDED
             else {
                 console.log('Turn: ', (turn += 1), '\nPlayer 1 card: ', player1Card.name, ' of ', player1Card.suit, 
                 '\nPlayer 2 card: ', player2Card.name, ' of ', player2Card.suit, "\n");
@@ -122,7 +117,7 @@ class Game {
     }
 
     endGame() { //Here is where the winner of the game is determined based on their points. 
-        let gameWinner = '';               //WHY CAN'T I GET PLAYER 2 TO WIN A GAME?
+        let gameWinner = '';              
         let player1 = this.players[0];
         let player2 = this.players[1];
         let winnerPoints = 0;
